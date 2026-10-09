@@ -1,0 +1,14 @@
+fn inf(n) { return inf(n + 1); }
+print inf(0);
+print 7 / 0;
+print variabile_inesistente;
+y = 5;
+print nonesiste(1);
+fn due(a, b) { return a + b; }
+print due(1);
+return 5;
+fn esterna() { fn interna() { return 1; } return 2; }
+print esterna();
+fn ridef() { return 1; }
+fn ridef() { return 2; }
+print ridef();

@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build_debug",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-std=gnu11",
+                "-g",
+                "-o",
+                "${workspaceFolder}/ViKi",
+                "${workspaceFolder}/main.c",
+                "${workspaceFolder}/lexer.c",
+                "${workspaceFolder}/parser.c",
+                "${workspaceFolder}/interpreter.c"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}

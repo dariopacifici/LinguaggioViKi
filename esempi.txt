@@ -1,0 +1,28 @@
+let x = 10;
+x = 20;
+print x;
+let i = 0;
+while (i < 3) { print "i = " + i; i = i + 1; }
+print 5 == 5;
+print "a" == "b";
+print 3 != 4;
+print 2 <= 2;
+print 3 >= 4;
+print -3 + 1;
+fn somma(a, b) { return a + b; }
+print somma(2, 3);
+fn fatt(n) { if (n < 2) { return 1; } return n * fatt(n - 1); }
+print fatt(10);
+fn fib(n) { if (n < 2) return n; return fib(n - 1) + fib(n - 2); }
+print fib(15);
+let g = 100;
+fn locale() { let g = 1; g = g + 1; return g; }
+print locale();
+print g;
+fn globale() { g = g + 1; }
+globale();
+print g;
+fn saluta(nome) { print "Ciao " + nome + "!"; }
+saluta("Mario");
+fn dentro_while() { let k = 0; while (1) { k = k + 1; if (k == 5) { return k; } } }
+print dentro_while();
