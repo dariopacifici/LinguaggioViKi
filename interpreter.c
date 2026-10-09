@@ -58,13 +58,14 @@ void free_value(Value v) {
 
 static char* value_to_cstr(Value v) {
     if (v.type == VAL_STRING) return strdup(v.as.string);
+    if (v.type == VAL_BOOL)   return strdup(v.as.boolean ? "true" : "false");
     char buf[64];
     snprintf(buf, sizeof buf, "%g", v.as.number);
     return strdup(buf);
 }
 
 static int is_truthy(Value v) {
-    if (v.type == VAL_BOOL)   return v.as.boolean;
+    if (v.type == VAL_BOOL) return v.as.boolean;
     if (v.type == VAL_NUMBER) return v.as.number != 0.0;
     if (v.type == VAL_STRING) return v.as.string && v.as.string[0] != '\0';
     return 0;
@@ -270,9 +271,9 @@ Value evaluate(ASTNode* node) {
                 int eq;
                 if (left.type != right.type)         eq = 0;
                 else if (left.type == VAL_STRING)    eq = (strcmp(left.as.string, right.as.string) == 0);
+                else if (left.type == VAL_BOOL)      eq = (left.as.boolean == right.as.boolean);
                 else                                 eq = (left.as.number == right.as.number);
-               /* result = make_number((op == TOKEN_EQUAL) ? eq : !eq); */
-               result = make_bool((op == TOKEN_EQUAL) ? eq : !eq);
+                result = make_bool((op == TOKEN_EQUAL) ? eq : !eq);
             } else if (left.type == VAL_NUMBER && right.type == VAL_NUMBER) {
                 double l = left.as.number;
                 double r = right.as.number;
@@ -287,10 +288,10 @@ Value evaluate(ASTNode* node) {
                             result = make_number(l / r);
                         }
                         break;
-                    case TOKEN_GREATER:       result = make_number(l > r  ? 1.0 : 0.0); break;
-                    case TOKEN_LESS:          result = make_number(l < r  ? 1.0 : 0.0); break;
-                    case TOKEN_GREATER_EQUAL: result = make_number(l >= r ? 1.0 : 0.0); break;
-                    case TOKEN_LESS_EQUAL:    result = make_number(l <= r ? 1.0 : 0.0); break;
+                    case TOKEN_GREATER:       result = make_bool(l > r); break;
+                    case TOKEN_LESS:          result = make_bool(l < r); break;
+                    case TOKEN_GREATER_EQUAL: result = make_bool(l >= r); break;
+                    case TOKEN_LESS_EQUAL:    result = make_bool(l <= r); break;
                     default: break;
                 }
             } else {
@@ -319,8 +320,9 @@ Value evaluate(ASTNode* node) {
 
         case NODE_PRINT: {
             Value val = evaluate(node->expr);
-            if (val.type == VAL_STRING) printf(">> %s\n", val.as.string);
-            else                        printf(">> %g\n", val.as.number);
+            if (val.type == VAL_STRING)      printf(">> %s\n", val.as.string);
+            else if (val.type == VAL_BOOL)   printf(">> %s\n", val.as.boolean ? "true" : "false");
+            else                             printf(">> %g\n", val.as.number);
             return val;
         }
 
