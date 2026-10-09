@@ -8,6 +8,7 @@ typedef enum {
     NODE_NUMBER,
     NODE_STRING,
     NODE_VARIABLE,
+    NODE_BOOL,
     NODE_BINARY_OP,
     NODE_VAR_DECL,
     NODE_ASSIGN,

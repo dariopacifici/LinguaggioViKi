@@ -3,13 +3,14 @@
 
 #include "parser.h"
 
-typedef enum { VAL_NUMBER, VAL_STRING } ValueType;
+typedef enum { VAL_NUMBER, VAL_STRING, VAL_BOOL } ValueType;
 
 typedef struct {
     ValueType type;
     union {
         double number;
-        char*  string;      // allocata con malloc: il Value ne è proprietario
+        char*  string;  
+          int boolean;     // allocata con malloc: il Value ne è proprietario
     } as;
 } Value;
 

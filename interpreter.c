@@ -36,6 +36,13 @@ static Value make_number(double n) {
     Value v; v.type = VAL_NUMBER; v.as.number = n; return v;
 }
 
+static Value make_bool(int b) {
+    Value v;
+    v.type = VAL_BOOL;
+    v.as.boolean = b ? 1 : 0;
+    return v;
+}
+
 static Value make_string(char* s) {          // prende possesso di s
     Value v; v.type = VAL_STRING; v.as.string = s; return v;
 }
@@ -57,7 +64,10 @@ static char* value_to_cstr(Value v) {
 }
 
 static int is_truthy(Value v) {
-    return (v.type == VAL_NUMBER) ? (v.as.number != 0.0) : (v.as.string[0] != '\0');
+    if (v.type == VAL_BOOL)   return v.as.boolean;
+    if (v.type == VAL_NUMBER) return v.as.number != 0.0;
+    if (v.type == VAL_STRING) return v.as.string && v.as.string[0] != '\0';
+    return 0;
 }
 
 // ---------- Variabili e scope ----------
@@ -261,7 +271,8 @@ Value evaluate(ASTNode* node) {
                 if (left.type != right.type)         eq = 0;
                 else if (left.type == VAL_STRING)    eq = (strcmp(left.as.string, right.as.string) == 0);
                 else                                 eq = (left.as.number == right.as.number);
-                result = make_number((op == TOKEN_EQUAL) ? eq : !eq);
+               /* result = make_number((op == TOKEN_EQUAL) ? eq : !eq); */
+               result = make_bool((op == TOKEN_EQUAL) ? eq : !eq);
             } else if (left.type == VAL_NUMBER && right.type == VAL_NUMBER) {
                 double l = left.as.number;
                 double r = right.as.number;
